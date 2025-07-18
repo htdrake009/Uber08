@@ -3,7 +3,21 @@ import { createRoot } from 'react-dom/client';
 import App from './App.tsx';
 import './index.css';
 
-createRoot(document.getElementById('root')!).render(
+// Performance monitoring
+if (typeof window !== 'undefined') {
+  // Web Vitals monitoring
+  import('web-vitals').then(({ getCLS, getFID, getFCP, getLCP, getTTFB }) => {
+    getCLS(console.log);
+    getFID(console.log);
+    getFCP(console.log);
+    getLCP(console.log);
+    getTTFB(console.log);
+  });
+}
+
+const root = createRoot(document.getElementById('root')!);
+
+root.render(
   <StrictMode>
     <App />
   </StrictMode>

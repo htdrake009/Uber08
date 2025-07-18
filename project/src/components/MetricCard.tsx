@@ -1,5 +1,5 @@
 import React from 'react';
-import { DivideIcon as LucideIcon } from 'lucide-react';
+import type { LucideIcon } from 'lucide-react';
 
 interface MetricCardProps {
   title: string;
@@ -15,9 +15,9 @@ const colorClasses = {
   green: 'bg-green-50 text-green-600 border-green-200',
   amber: 'bg-amber-50 text-amber-600 border-amber-200',
   red: 'bg-red-50 text-red-600 border-red-200',
-};
+} as const;
 
-export default function MetricCard({ title, value, change, trend, icon: Icon, color }: MetricCardProps) {
+const MetricCard = React.memo<MetricCardProps>(({ title, value, change, trend, icon: Icon, color }) => {
   return (
     <div className="bg-white rounded-xl p-6 border border-slate-200 hover:shadow-lg transition-shadow">
       <div className="flex items-center justify-between">
@@ -37,4 +37,8 @@ export default function MetricCard({ title, value, change, trend, icon: Icon, co
       </div>
     </div>
   );
-}
+});
+
+MetricCard.displayName = 'MetricCard';
+
+export default MetricCard;

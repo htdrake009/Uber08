@@ -1,50 +1,50 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import MetricCard from '../MetricCard';
 import { Users, DollarSign, ShoppingCart, TrendingUp } from 'lucide-react';
 
-const metrics = [
-  {
-    title: 'Total Users',
-    value: '12,847',
-    change: '12.5%',
-    trend: 'up' as const,
-    icon: Users,
-    color: 'green' as const,
-  },
-  {
-    title: 'Revenue',
-    value: '$89,247',
-    change: '8.2%',
-    trend: 'up' as const,
-    icon: DollarSign,
-    color: 'green' as const,
-  },
-  {
-    title: 'Orders',
-    value: '3,429',
-    change: '3.1%',
-    trend: 'down' as const,
-    icon: ShoppingCart,
-    color: 'amber' as const,
-  },
-  {
-    title: 'Growth Rate',
-    value: '24.3%',
-    change: '5.4%',
-    trend: 'up' as const,
-    icon: TrendingUp,
-    color: 'green' as const,
-  },
-];
+const Overview = React.memo(() => {
+  const metrics = useMemo(() => [
+    {
+      title: 'Total Users',
+      value: '12,847',
+      change: '12.5%',
+      trend: 'up' as const,
+      icon: Users,
+      color: 'green' as const,
+    },
+    {
+      title: 'Revenue',
+      value: '$89,247',
+      change: '8.2%',
+      trend: 'up' as const,
+      icon: DollarSign,
+      color: 'green' as const,
+    },
+    {
+      title: 'Orders',
+      value: '3,429',
+      change: '3.1%',
+      trend: 'down' as const,
+      icon: ShoppingCart,
+      color: 'amber' as const,
+    },
+    {
+      title: 'Growth Rate',
+      value: '24.3%',
+      change: '5.4%',
+      trend: 'up' as const,
+      icon: TrendingUp,
+      color: 'green' as const,
+    },
+  ], []);
 
-const recentActivity = [
-  { user: 'John Doe', action: 'Created new project', time: '2 minutes ago' },
-  { user: 'Jane Smith', action: 'Updated profile settings', time: '15 minutes ago' },
-  { user: 'Mike Johnson', action: 'Completed onboarding', time: '1 hour ago' },
-  { user: 'Sarah Wilson', action: 'Made a purchase', time: '2 hours ago' },
-];
+  const recentActivity = useMemo(() => [
+    { user: 'John Doe', action: 'Created new project', time: '2 minutes ago' },
+    { user: 'Jane Smith', action: 'Updated profile settings', time: '15 minutes ago' },
+    { user: 'Mike Johnson', action: 'Completed onboarding', time: '1 hour ago' },
+    { user: 'Sarah Wilson', action: 'Made a purchase', time: '2 hours ago' },
+  ], []);
 
-export default function Overview() {
   return (
     <div className="space-y-6">
       <div>
@@ -92,4 +92,8 @@ export default function Overview() {
       </div>
     </div>
   );
-}
+});
+
+Overview.displayName = 'Overview';
+
+export default Overview;
