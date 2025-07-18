@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo, useCallback } from 'react';
 import { 
   LayoutDashboard, 
   Users, 
@@ -24,9 +24,35 @@ const menuItems = [
   { id: 'reports', label: 'Reports', icon: FileText },
   { id: 'notifications', label: 'Notifications', icon: Bell },
   { id: 'settings', label: 'Settings', icon: Settings },
-];
+] as const;
 
-export default function Sidebar({ activeSection, onSectionChange, isCollapsed, onToggleCollapse }: SidebarProps) {
+const Sidebar = React.memo<SidebarProps>(({ activeSection, onSectionChange, isCollapsed, onToggleCollapse }) => {
+  const handleMenuClick = useCallback((itemId: string) => {
+    onSectionChange(itemId);
+  }, [onSectionChange]);
+
+  const menuButtons = useMemo(() => 
+    menuItems.map((item) => {
+      const Icon = item.icon;
+      const isActive = activeSection === item.id;
+      
+      return (
+        <li key={item.id}>
+          <button
+            onClick={() => handleMenuClick(item.id)}
+            className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg transition-colors ${
+              isActive 
+                ? 'bg-green-600 text-white' 
+                : 'text-slate-300 hover:bg-slate-700 hover:text-white'
+            }`}
+          >
+            <Icon className="w-5 h-5 flex-shrink-0" />
+            {!isCollapsed && <span>{item.label}</span>}
+          </button>
+        </li>
+      );
+    }), [activeSection, isCollapsed, handleMenuClick]);
+
   return (
     <div className={`bg-slate-900 text-white transition-all duration-300 flex flex-col ${isCollapsed ? 'w-16' : 'w-64'}`}>
       <div className="p-4 border-b border-slate-700">
@@ -45,26 +71,7 @@ export default function Sidebar({ activeSection, onSectionChange, isCollapsed, o
       
       <nav className="flex-1 p-4">
         <ul className="space-y-2">
-          {menuItems.map((item) => {
-            const Icon = item.icon;
-            const isActive = activeSection === item.id;
-            
-            return (
-              <li key={item.id}>
-                <button
-                  onClick={() => onSectionChange(item.id)}
-                  className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg transition-colors ${
-                    isActive 
-                      ? 'bg-green-600 text-white' 
-                      : 'text-slate-300 hover:bg-slate-700 hover:text-white'
-                  }`}
-                >
-                  <Icon className="w-5 h-5 flex-shrink-0" />
-                  {!isCollapsed && <span>{item.label}</span>}
-                </button>
-              </li>
-            );
-          })}
+          {menuButtons}
         </ul>
       </nav>
       
@@ -76,4 +83,8 @@ export default function Sidebar({ activeSection, onSectionChange, isCollapsed, o
       </div>
     </div>
   );
-}
+});
+
+Sidebar.displayName = 'Sidebar';
+
+export default Sidebar;

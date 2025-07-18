@@ -1,10 +1,19 @@
-import React, { useState } from 'react';
+import React, { useState, Suspense } from 'react';
 import Sidebar from './components/Sidebar';
 import Header from './components/Header';
-import Overview from './components/sections/Overview';
-import Analytics from './components/sections/Analytics';
-import Users from './components/sections/Users';
-import Settings from './components/sections/Settings';
+
+// Lazy load section components for better performance
+const Overview = React.lazy(() => import('./components/sections/Overview'));
+const Analytics = React.lazy(() => import('./components/sections/Analytics'));
+const Users = React.lazy(() => import('./components/sections/Users'));
+const Settings = React.lazy(() => import('./components/sections/Settings'));
+
+// Loading component for better UX
+const LoadingSpinner = () => (
+  <div className="flex items-center justify-center min-h-[400px]">
+    <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-green-600"></div>
+  </div>
+);
 
 function App() {
   const [activeSection, setActiveSection] = useState('overview');
@@ -52,7 +61,9 @@ function App() {
         <Header />
         
         <main className="flex-1 p-6">
-          {renderContent()}
+          <Suspense fallback={<LoadingSpinner />}>
+            {renderContent()}
+          </Suspense>
         </main>
       </div>
     </div>
